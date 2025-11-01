@@ -127,7 +127,7 @@ export default function QuotationsPage() {
   return (
     <div className="p-6 md:p-8 lg:p-10 min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="hidden md:block text-3xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           All Quotations
         </h1>
 
@@ -223,7 +223,7 @@ export default function QuotationsPage() {
         </div>
 
         {/* Mobile Card View */}
-        <div className="md:hidden max-h-[70vh] overflow-y-auto pr-2 smooth-scroll-container">
+        <div className="md:hidden overflow-y-auto pr-2 smooth-scroll-container">
           <div className="space-y-4 pb-4">
             {filteredQuotations.map((quot, i) => (
               <div

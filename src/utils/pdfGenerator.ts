@@ -63,22 +63,21 @@ export async function generateQuotationPDF(
 }
 
 // ===== PDF Generator =====
-export function generatePDFBlob(
+export async function generatePDFBlob(
   quotation: Quotation,
   customer: Customer | undefined,
   products: Product[] | undefined
 ): Promise<Blob> {
-  return new Promise((resolve) => {
-    const doc = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4",
+  });
 
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 15;
-    let y = 20;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 15;
+  let y = 20;
 
     // ---- Background Header Section - Light Beige ----
     doc.setFillColor(240, 235, 230);
@@ -234,6 +233,7 @@ export function generatePDFBlob(
               price: item.price,
               gst: 18, // You can add GST field to your interface if needed
               total: itemTotal,
+              photoSrc: item.customPhoto || product?.image,
             };
           })
         : [
@@ -271,11 +271,30 @@ export function generatePDFBlob(
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
 
-    itemsToDisplay.forEach((item, index) => {
-      // Image placeholder box
-      doc.setDrawColor(200, 200, 200);
-      doc.setLineWidth(0.3);
-      doc.rect(colImage, y - 5, 14, 12, "S");
+    for (const [index, item] of itemsToDisplay.entries()) {
+      // Add image or placeholder
+      if (item.photoSrc) {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.src = item.photoSrc;
+          await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+          });
+          doc.addImage(img, 'JPEG', colImage, y - 5, 14, 12);
+        } catch {
+          // Draw placeholder if image fails to load
+          doc.setDrawColor(200, 200, 200);
+          doc.setLineWidth(0.3);
+          doc.rect(colImage, y - 5, 14, 12, "S");
+        }
+      } else {
+        // Draw placeholder box
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.rect(colImage, y - 5, 14, 12, "S");
+      }
 
       // Item details
       doc.text(item.description, colDescription, y);
@@ -292,7 +311,7 @@ export function generatePDFBlob(
         doc.line(margin, y - 2, pageWidth - margin, y - 2);
         y += 2;
       }
-    });
+    }
 
     y += 10;
 
@@ -351,6 +370,5 @@ export function generatePDFBlob(
 
     // ---- Output ----
     const pdfBlob = doc.output("blob");
-    resolve(pdfBlob);
-  });
+    return pdfBlob;
 }
