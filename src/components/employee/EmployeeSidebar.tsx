@@ -101,7 +101,7 @@ export function EmployeeSidebar() {
           </nav>
 
           {/* Logout - Positioned after navigation */}
-          <div className="border-t border-gray-100 px-3 pt-4 pb-60 mt-85">
+          <div className="border-t border-gray-100 px-3 pt-4 pb-55 mt-78">
             <button
               onClick={() => {
                 logout();
