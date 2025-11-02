@@ -206,7 +206,7 @@ export default function AdminDashboard() {
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-700">
             <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
               <Send className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 flex-shrink-0" />
-              <span className="truncate">Sent vs Marked Quotations</span>
+              <span className="truncate">Sent vs Maked Quotations</span>
             </h2>
             <div className="w-full h-[220px] sm:h-[280px] md:h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
